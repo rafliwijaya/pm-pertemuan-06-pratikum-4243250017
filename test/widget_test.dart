@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pm_p6_4243250017/main.dart';
+import 'package:pm_p6_pratikum_4243250017/main.dart';
 import 'package:material_ui/material_ui.dart';
 
 void main() {
