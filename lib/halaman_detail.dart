@@ -1,7 +1,9 @@
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:provider/provider.dart';
 
 import 'data.dart';
+import 'keranjang_model.dart';
 
 class HalamanDetail extends StatelessWidget {
   const HalamanDetail({super.key, required this.produk});
@@ -22,19 +24,20 @@ class HalamanDetail extends StatelessWidget {
         ),
       );
     }
+    final diKeranjang =
+        context.select((KeranjangModel k) => k.jumlahDari(p.id));
 
     final skema = Theme.of(context).colorScheme;
     final teks = Theme.of(context).textTheme;
+
     final gambar = AspectRatio(
       aspectRatio: 4 / 3,
       child: Container(
         color: p.warna.withValues(alpha: 0.15),
-        child: Hero(
-          tag: 'produk-ikon-${p.id}',
-          child: Icon(p.ikon, size: 120, color: p.warna),
-        ),
+        child: Icon(p.ikon, size: 120, color: p.warna),
       ),
     );
+
     final info = Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -42,11 +45,7 @@ class HalamanDetail extends StatelessWidget {
         children: [
           Text(p.nama, style: teks.headlineSmall),
           const SizedBox(height: 8),
-          ActionChip(
-            label: Text(p.kategori),
-            avatar: const Icon(Icons.category, size: 18),
-            onPressed: () => context.go('/kategori/${p.kategori}'),
-          ),
+          Chip(label: Text(p.kategori)),
           const SizedBox(height: 8),
           Text(
             p.harga.rupiah,
@@ -54,6 +53,14 @@ class HalamanDetail extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(p.deskripsi, style: teks.bodyLarge),
+          const SizedBox(height: 24),
+          FilledButton.icon(
+            onPressed: () => context.read<KeranjangModel>().tambah(p),
+            icon: const Icon(Icons.add_shopping_cart),
+            label: Text(diKeranjang == 0
+                ? 'Tambah ke keranjang'
+                : 'Tambah lagi ($diKeranjang di keranjang)'),
+          ),
         ],
       ),
     );
